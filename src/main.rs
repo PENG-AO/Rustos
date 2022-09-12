@@ -3,20 +3,15 @@
 #![no_std] // block standard lib
 #![no_main] // reset entry point
 
-use core::panic::PanicInfo;
+mod vga_buffer;
 
-static HELLO: &[u8] = b"Hello World!";
+use core::panic::PanicInfo;
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    let vga_buffer = 0xb8000 as *mut u8;
-
-    for (idx, &byte) in HELLO.iter().enumerate() {
-        unsafe {
-            *vga_buffer.offset(idx as isize * 2) = byte;
-            *vga_buffer.offset(idx as isize * 2 + 1) = 0xb;
-        }
-    }
+    use core::fmt::Write;
+    vga_buffer::WRITER.lock().write_str("hello ").unwrap();
+    write!(vga_buffer::WRITER.lock(), "again at {}", "16:15").unwrap();
 
     loop {}
 }
