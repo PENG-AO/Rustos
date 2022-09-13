@@ -9,14 +9,13 @@ use core::panic::PanicInfo;
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    use core::fmt::Write;
-    vga_buffer::WRITER.lock().write_str("hello ").unwrap();
-    write!(vga_buffer::WRITER.lock(), "again at {}", "16:15").unwrap();
+    println!("Hello World! at {}", "12:21");
 
     loop {}
 }
 
 #[panic_handler]
-fn panic(_info: &PanicInfo) -> ! {
+fn panic(info: &PanicInfo) -> ! {
+    println!("{}", info);
     loop {}
 }
