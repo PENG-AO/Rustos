@@ -7,7 +7,8 @@ use core::panic::PanicInfo;
 use rustos::{QemuExitCode, exit_qemu, serial_print, serial_println};
 
 #[no_mangle]
-pub extern "C" fn _start() -> ! {
+pub extern "C"
+fn _start() -> ! {
     should_fail();
     serial_println!("[test did not panic]");
     exit_qemu(QemuExitCode::Failed);

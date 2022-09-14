@@ -10,8 +10,13 @@ use core::panic::PanicInfo;
 use rustos::println;
 
 #[no_mangle]
-pub extern "C" fn _start() -> ! {
-    println!("Hello World! at {}", "12:21");
+pub extern "C" // entry point for cargo run
+fn _start() -> ! {
+    println!("Hello World! at {}", "12:19");
+
+    rustos::init();
+    x86_64::instructions::interrupts::int3();
+    println!("returned from handler!");
 
     #[cfg(test)]
     test_main();
