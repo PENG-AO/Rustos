@@ -12,11 +12,9 @@ use rustos::println;
 #[no_mangle]
 pub extern "C" // entry point for cargo run
 fn _start() -> ! {
-    println!("Hello World! at {}", "12:19");
+    println!("Hello World! at {}", "13:50");
 
     rustos::init();
-    x86_64::instructions::interrupts::int3();
-    println!("returned from handler!");
 
     #[cfg(test)]
     test_main();
