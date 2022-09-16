@@ -12,21 +12,21 @@ use rustos::println;
 #[no_mangle]
 pub extern "C" // entry point for cargo run
 fn _start() -> ! {
-    println!("Hello World! at {}", "13:50");
+    println!("Hello World! at {}", "13:47");
 
     rustos::init();
 
     #[cfg(test)]
     test_main();
 
-    loop {}
+    rustos::hlt_loop();
 }
 
 #[cfg(not(test))]
 #[panic_handler] // normal one
 fn panic(info: &PanicInfo) -> ! {
     println!("{}", info);
-    loop {}
+    rustos::hlt_loop();
 }
 
 #[cfg(test)]

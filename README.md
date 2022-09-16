@@ -10,7 +10,7 @@ My source code of [Writing an OS in Rust](https://os.phil-opp.com).
 - [x] post-04, Testing
 - [x] post-05, CPU Exceptions
 - [x] post-06, Double Faults
-- [ ] post-07, Hardware Interrupts
+- [x] post-07, Hardware Interrupts
 - [ ] post-08, Introducing to Paging
 - [ ] post-09, Paging Implementation
 - [ ] post-10, Heap Allocation

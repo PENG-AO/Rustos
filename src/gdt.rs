@@ -40,6 +40,7 @@ lazy_static!{
 pub fn init() {
     use x86_64::instructions::tables::load_tss;
     use x86_64::instructions::segmentation::{CS, Segment};
+    
     GDT.0.load();
     unsafe {
         CS::set_reg(GDT.1.code_selector);
