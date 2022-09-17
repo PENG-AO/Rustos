@@ -2,12 +2,14 @@
 
 use x86_64::structures::idt::InterruptDescriptorTable;
 use x86_64::structures::idt::InterruptStackFrame;
+use x86_64::structures::idt::PageFaultErrorCode;
 use pic8259::ChainedPics;
 use spin;
 use lazy_static::lazy_static;
 use crate::print;
 use crate::println;
 use crate::gdt;
+use crate::hlt_loop;
 
 // PIC layout           ____________                          ____________
 // Real Time Clock --> |            |   Timer -------------> |            |
@@ -45,6 +47,7 @@ lazy_static!{
                 .set_handler_fn(double_fault_handler)
                 .set_stack_index(gdt::DOUBLE_FAULT_IST_IDX);
         }
+        idt.page_fault.set_handler_fn(page_fault_handler);
         idt[InterruptIndex::Timer.as_usize()].set_handler_fn(timer_interrupt_handler);
         idt[InterruptIndex::Keyboard.as_usize()].set_handler_fn(keyboard_interrupt_handler);
         idt
@@ -101,6 +104,17 @@ fn keyboard_interrupt_handler(_stack_frame: InterruptStackFrame) {
         }
     }
     send_eoi(InterruptIndex::Keyboard);
+}
+
+extern "x86-interrupt"
+fn page_fault_handler(stack_frame: InterruptStackFrame, err_code: PageFaultErrorCode) {
+    use x86_64::registers::control::Cr2;
+    
+    println!("EXCEPTION: PAGE FAULT");
+    println!("Accessed Adress: {:?}", Cr2::read());
+    println!("Error Code: {:?}", err_code);
+    println!("{:#?}", stack_frame);
+    hlt_loop();
 }
 
 #[test_case]
