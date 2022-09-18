@@ -7,14 +7,29 @@
 #![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
+use bootloader::BootInfo;
+use bootloader::entry_point;
 use rustos::println;
 
-#[no_mangle]
-pub extern "C" // entry point for cargo run
-fn _start() -> ! {
+entry_point!(kernel_main); // setup entry point with type-checked
+
+fn kernel_main(boot_info: &'static BootInfo) -> ! {
+    // use rustos::memory::active_level4_table;
+    // use x86_64::VirtAddr;
+
+    println!("Hello World!");
     rustos::init();
 
-    println!("Hello World! at {}", "15:28");
+    // let physical_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
+    // println!("here1");
+    // let level4_table = unsafe { active_level4_table(physical_mem_offset) };
+    // println!("here2");
+
+    // for (idx, entry) in level4_table.iter().enumerate() {
+    //     if !entry.is_unused() {
+    //         println!("L4 entry {}: {:?}", idx, entry);
+    //     }
+    // }
 
     #[cfg(test)]
     test_main();

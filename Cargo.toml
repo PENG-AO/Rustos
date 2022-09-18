@@ -19,6 +19,9 @@ pc-keyboard = "0.5.0"
 version = "1.0"
 features = ["spin_no_std"]
 
+[package.metadata.bootloader]
+map_physical_memory = true
+
 [package.metadata.bootimage]
 test-args = [
     "-device", "isa-debug-exit,iobase=0xf4,iosize=0x04",
