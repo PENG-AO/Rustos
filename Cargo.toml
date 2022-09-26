@@ -7,7 +7,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bootloader = "0.9.8"
 volatile = "0.2.6"
 spin = "0.9.4"
 x86_64 = "0.14.2"
@@ -19,8 +18,12 @@ pc-keyboard = "0.5.0"
 version = "1.0"
 features = ["spin_no_std"]
 
+[dependencies.bootloader]
+version = "0.9.8"
+features = ["map_physical_memory"]
+
 [package.metadata.bootloader]
-map_physical_memory = true
+physical-memory-offset = "0x0000f00000000000"
 
 [package.metadata.bootimage]
 test-args = [

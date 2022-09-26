@@ -14,22 +14,25 @@ use rustos::println;
 entry_point!(kernel_main); // setup entry point with type-checked
 
 fn kernel_main(boot_info: &'static BootInfo) -> ! {
-    // use rustos::memory::active_level4_table;
-    // use x86_64::VirtAddr;
+    use rustos::memory::translate_addr;
+    use x86_64::VirtAddr;
 
     println!("Hello World!");
     rustos::init();
 
-    // let physical_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
-    // println!("here1");
-    // let level4_table = unsafe { active_level4_table(physical_mem_offset) };
-    // println!("here2");
+    let physical_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
+    let addresses = [
+        0xb8000, // the identity-mapped vga buffer page
+        0x201008, // some code page
+        0x0100_0020_1a10, // some stack page
+        boot_info.physical_memory_offset, // virtual address mapped to physical address 0
+    ];
 
-    // for (idx, entry) in level4_table.iter().enumerate() {
-    //     if !entry.is_unused() {
-    //         println!("L4 entry {}: {:?}", idx, entry);
-    //     }
-    // }
+    for &address in &addresses {
+        let virtual_addr = VirtAddr::new(address);
+        let physical_addr = unsafe { translate_addr(virtual_addr, physical_mem_offset) };
+        println!("{:?} -> {:?}", virtual_addr, physical_addr);
+    }
 
     #[cfg(test)]
     test_main();
