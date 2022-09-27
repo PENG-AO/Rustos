@@ -14,29 +14,28 @@ use rustos::println;
 entry_point!(kernel_main); // setup entry point with type-checked
 
 fn kernel_main(boot_info: &'static BootInfo) -> ! {
-    use rustos::memory::translate_addr;
+    use rustos::memory;
+    use rustos::memory::BootInfoFrameAllocator;
+    use x86_64::structures::paging::Page;
     use x86_64::VirtAddr;
 
     println!("Hello World!");
     rustos::init();
 
     let physical_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
-    let addresses = [
-        0xb8000, // the identity-mapped vga buffer page
-        0x201008, // some code page
-        0x0100_0020_1a10, // some stack page
-        boot_info.physical_memory_offset, // virtual address mapped to physical address 0
-    ];
+    let mut mapper = unsafe { memory::init(physical_mem_offset) };
+    let mut frame_allocator = unsafe { BootInfoFrameAllocator::init(&boot_info.memory_map) };
 
-    for &address in &addresses {
-        let virtual_addr = VirtAddr::new(address);
-        let physical_addr = unsafe { translate_addr(virtual_addr, physical_mem_offset) };
-        println!("{:?} -> {:?}", virtual_addr, physical_addr);
-    }
+    let page = Page::containing_address(VirtAddr::new(0xdeadbeaf000));
+    memory::create_example_mapping(page, &mut mapper, &mut frame_allocator);
+
+    let page_ptr: *mut u64 = page.start_address().as_mut_ptr();
+    unsafe { page_ptr.offset(400).write_volatile(0xf021_f077_f065_f04e) };
 
     #[cfg(test)]
     test_main();
 
+    println!("It did not crash!");
     rustos::hlt_loop();
 }
 
