@@ -1,10 +1,16 @@
 // gdt.rs
 
-use x86_64::VirtAddr;
-use x86_64::structures::tss::TaskStateSegment;
-use x86_64::structures::gdt::GlobalDescriptorTable;
-use x86_64::structures::gdt::Descriptor;
-use x86_64::structures::gdt::SegmentSelector;
+use x86_64::{
+    VirtAddr,
+    structures::{
+        tss::TaskStateSegment,
+        gdt::{
+            GlobalDescriptorTable,
+            Descriptor,
+            SegmentSelector
+        }
+    }
+};
 use lazy_static::lazy_static;
 
 pub const DOUBLE_FAULT_IST_IDX: u16 = 0;

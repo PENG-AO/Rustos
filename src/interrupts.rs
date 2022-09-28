@@ -1,15 +1,18 @@
 // interrupts.rs
 
-use x86_64::structures::idt::InterruptDescriptorTable;
-use x86_64::structures::idt::InterruptStackFrame;
-use x86_64::structures::idt::PageFaultErrorCode;
+use x86_64::structures::idt::{
+    InterruptDescriptorTable,
+    InterruptStackFrame,
+    PageFaultErrorCode
+};
 use pic8259::ChainedPics;
 use spin;
 use lazy_static::lazy_static;
-use crate::print;
-use crate::println;
-use crate::gdt;
-use crate::hlt_loop;
+use crate::{
+    print, println,
+    gdt,
+    hlt_loop
+};
 
 // PIC layout           ____________                          ____________
 // Real Time Clock --> |            |   Timer -------------> |            |

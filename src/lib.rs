@@ -9,8 +9,11 @@
 #![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
-#[cfg(test)] use bootloader::BootInfo;
-#[cfg(test)] use bootloader::entry_point;
+#[cfg(test)]
+use bootloader::{
+    BootInfo,
+    entry_point
+};
 
 pub mod vga_buffer;
 pub mod serial;
