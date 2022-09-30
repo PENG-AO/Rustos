@@ -14,5 +14,5 @@ My source code of [Writing an OS in Rust](https://os.phil-opp.com).
 - [x] post-08, Introducing to Paging (22/09/17)
 - [x] post-09, Paging Implementation (22/09/18, 22/09/26, 22/09/27)
 - [x] post-10, Heap Allocation (22/09/28)
-- [ ] post-11, Allocator Designs
+- [x] post-11, Allocator Designs (22/09/29, 22/09/30)
 - [ ] post-12, Async/Await
